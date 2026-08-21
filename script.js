@@ -22,7 +22,20 @@ const revealObserver = new IntersectionObserver((entries) => {
   });
 }, { threshold: 0.12 });
 
-document.querySelectorAll('.reveal').forEach((element) => revealObserver.observe(element));
+document.querySelectorAll('.reveal, .reveal-up, .reveal-left, .reveal-right, .reveal-scale').forEach((element) => revealObserver.observe(element));
+
+const siteHeader = document.querySelector('.site-header');
+if (siteHeader) {
+  const handleScroll = () => {
+    if (window.scrollY > 40) {
+      siteHeader.classList.add('scrolled');
+    } else {
+      siteHeader.classList.remove('scrolled');
+    }
+  };
+  window.addEventListener('scroll', handleScroll, { passive: true });
+  handleScroll();
+}
 
 const contactForm = document.querySelector('#contact-form');
 const formStatus = document.querySelector('.form-status');
