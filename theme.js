@@ -89,6 +89,20 @@ function getSiteSettings() {
   }
 }
 
+async function loadRemoteSettings() {
+  try {
+    const response = await fetch('/api/settings', { headers: { Accept: 'application/json' } });
+    const result = await response.json();
+    if (response.ok && result.success && result.settings) {
+      localStorage.setItem('hotram-site-settings', JSON.stringify(result.settings));
+      return result.settings;
+    }
+  } catch {
+    // Use the cached settings when the API is unavailable during local development.
+  }
+  return getSiteSettings();
+}
+
 function applySiteSettings(settings = getSiteSettings()) {
   const root = document.documentElement;
   const language = localStorage.getItem('hotram-language') || 'vi';
@@ -170,4 +184,4 @@ function applySiteSettings(settings = getSiteSettings()) {
   }
 }
 
-if (typeof document !== 'undefined') applySiteSettings();
+if (typeof document !== 'undefined') loadRemoteSettings().then(applySiteSettings);

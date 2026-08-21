@@ -7,6 +7,28 @@ let settings = loadSettings();
 const preview = document.querySelector('#site-preview');
 const saveState = document.querySelector('#save-state');
 
+async function loadSharedSettings() {
+  try {
+    const response = await fetch('/api/settings', { headers: { Accept: 'application/json' } });
+    const result = await response.json();
+    if (response.ok && result.success && result.settings) {
+      settings = { ...settings, ...result.settings, content: { ...settings.content, ...result.settings.content }, theme: { ...settings.theme, ...result.settings.theme } };
+      localStorage.setItem(settingsKey, JSON.stringify(settings));
+    }
+  } catch {
+    // Keep local settings available when developing with a static server.
+  }
+  fillFields();
+}
+
+async function saveSharedSettings() {
+  const token = window.localStorage.getItem('hotram-admin-token') || window.prompt('Nhập Admin Editor Token');
+  if (token) window.localStorage.setItem('hotram-admin-token', token);
+  const response = await fetch('/api/settings', { method: 'PUT', headers: { 'Content-Type': 'application/json', Accept: 'application/json', 'x-admin-token': token || '' }, body: JSON.stringify({ settings }) });
+  const result = await response.json();
+  if (!response.ok || !result.success) throw new Error(result.message || 'Không thể đồng bộ settings lên server.');
+}
+
 function loadSettings() {
   try {
     const saved = JSON.parse(localStorage.getItem(settingsKey));
@@ -74,9 +96,14 @@ async function translateContent() {
 document.querySelector('#save-button').addEventListener('click', async () => {
   refreshPreview();
   await translateContent();
+  try {
+    await saveSharedSettings();
+    saveState.textContent = 'Đã lưu, dịch và đồng bộ';
+  } catch (error) {
+    saveState.textContent = error.message;
+    saveState.classList.add('unsaved');
+  }
   preview.contentWindow.location.reload();
-  saveState.textContent = 'Đã lưu và dịch';
-  saveState.classList.remove('unsaved');
 });
 document.querySelector('#translate-button').addEventListener('click', translateContent);
 document.querySelector('#reset-button').addEventListener('click', () => {
@@ -95,4 +122,4 @@ document.querySelectorAll('[data-device]').forEach((button) => {
   });
 });
 
-fillFields();
+loadSharedSettings();
