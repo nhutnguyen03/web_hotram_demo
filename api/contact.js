@@ -13,7 +13,7 @@ export default async function handler(request, response) {
     const requiredFields = ['name', 'phone', 'email', 'message'];
     if (requiredFields.some((field) => !String(body[field] || '').trim())) return response.status(400).json({ success: false, message: 'Please complete all required fields.' });
     const web3FormsResponse = await fetch('https://api.web3forms.com/submit', { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify({ access_key: accessKey, subject: body.subject || 'Đăng ký tư vấn Hồ Tràm Santorini', from_name: 'Website Hồ Tràm Santorini', name: String(body.name).trim(), phone: String(body.phone).trim(), email: String(body.email).trim(), message: String(body.message).trim() }) });
-    const result = await web3FormsResponse.json();
+    const result = await web3FormsResponse.json().catch(() => ({}));
     return response.status(web3FormsResponse.ok && result.success ? 200 : 502).json({ success: Boolean(result.success), message: result.message || 'Web3Forms từ chối request.', providerStatus: web3FormsResponse.status });
   } catch {
     return response.status(502).json({ success: false, message: 'Không thể kết nối Web3Forms. Kiểm tra access key và domain được phép.' });

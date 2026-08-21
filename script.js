@@ -48,7 +48,7 @@ contactForm.addEventListener('submit', async (event) => {
     formStatus.style.color = '#dfc48d';
     contactForm.reset();
   } catch (error) {
-    formStatus.textContent = 'Có lỗi khi gửi thông tin. Vui lòng thử lại hoặc gọi 0909 123 456.';
+    formStatus.textContent = error.message || 'Có lỗi khi gửi thông tin. Vui lòng thử lại hoặc gọi 0909 123 456.';
     formStatus.style.color = '#e2a5a0';
   } finally {
     submitButton.disabled = false;
