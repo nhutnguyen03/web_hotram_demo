@@ -1,17 +1,31 @@
 const menuButton = document.querySelector('.menu-toggle');
 const navigation = document.querySelector('.main-nav');
+const siteHeader = document.querySelector('.site-header');
 
-menuButton.addEventListener('click', () => {
-  const isOpen = navigation.classList.toggle('open');
-  menuButton.setAttribute('aria-expanded', String(isOpen));
-});
-
-document.querySelectorAll('.main-nav a').forEach((link) => {
-  link.addEventListener('click', () => {
-    navigation.classList.remove('open');
-    menuButton.setAttribute('aria-expanded', 'false');
+if (menuButton && navigation) {
+  menuButton.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const isOpen = navigation.classList.toggle('open');
+    menuButton.setAttribute('aria-expanded', String(isOpen));
   });
-});
+
+  document.querySelectorAll('.main-nav a').forEach((link) => {
+    link.addEventListener('click', () => {
+      navigation.classList.remove('open');
+      menuButton.setAttribute('aria-expanded', 'false');
+    });
+  });
+
+  document.addEventListener('click', (event) => {
+    if (navigation.classList.contains('open')) {
+      const isClickInsideHeader = siteHeader && siteHeader.contains(event.target);
+      if (!isClickInsideHeader) {
+        navigation.classList.remove('open');
+        menuButton.setAttribute('aria-expanded', 'false');
+      }
+    }
+  });
+}
 
 const revealObserver = new IntersectionObserver((entries) => {
   entries.forEach((entry) => {
@@ -24,7 +38,6 @@ const revealObserver = new IntersectionObserver((entries) => {
 
 document.querySelectorAll('.reveal, .reveal-up, .reveal-left, .reveal-right, .reveal-scale').forEach((element) => revealObserver.observe(element));
 
-const siteHeader = document.querySelector('.site-header');
 if (siteHeader) {
   const handleScroll = () => {
     if (window.scrollY > 40) {
