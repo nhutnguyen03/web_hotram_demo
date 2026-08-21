@@ -1,50 +1,208 @@
 <!doctype html>
 <html lang="vi">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Quản trị giao diện | Hồ Tràm Santorini</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="admin.css">
 </head>
+
 <body>
-  <header class="admin-header"><a class="admin-brand" href="index.html"><span>△</span><strong>HO TRAM <small>SANTORINI</small></strong></a><div><span class="save-state" id="save-state">Đã lưu cục bộ</span><a class="view-site" href="index.html" target="_blank" rel="noreferrer">Xem website ↗</a></div></header>
+  <header class="admin-header">
+    <a class="admin-brand" href="index.html">
+      <span class="brand-logo">△</span>
+      <div class="brand-text">
+        <strong>HO TRAM</strong>
+        <small>SANTORINI CMS</small>
+      </div>
+    </a>
+    <div class="header-right">
+      <span class="save-state" id="save-state">Đã lưu cục bộ</span>
+      <a class="view-site" href="index.html" target="_blank" rel="noreferrer">
+        <span>Xem website</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+      </a>
+    </div>
+  </header>
+
   <main class="admin-shell">
     <aside class="settings-panel">
-      <div class="panel-title"><span><small>THEME EDITOR</small><h1>Điều chỉnh website</h1></span><button id="reset-button" class="quiet-button" type="button">Đặt lại</button></div>
-      <p class="notice">Thay đổi giao diện có thể lưu mà không sử dụng DeepL. Chỉ dùng “Lưu &amp; dịch tự động” khi bạn muốn cập nhật nội dung đa ngôn ngữ.</p>
+      <div class="panel-header">
+        <div class="panel-title">
+          <small class="kicker">THEME EDITOR</small>
+          <h1>Điều chỉnh website</h1>
+        </div>
+        <button id="reset-button" class="quiet-button" type="button" title="Khôi phục về mặc định">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
+          Đặt lại
+        </button>
+      </div>
 
+      <div class="notice">
+        <svg class="notice-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        <div>
+          Thay đổi giao diện có thể lưu mà không sử dụng DeepL. Chỉ dùng <strong>“Lưu &amp; dịch tự động”</strong> khi bạn muốn cập nhật nội dung đa ngôn ngữ.
+        </div>
+      </div>
+
+      <!-- Section 1: Content -->
       <section class="editor-section">
-        <h2>Nội dung trang chủ</h2>
+        <div class="section-header">
+          <span class="section-badge">01</span>
+          <h2>Nội dung trang chủ</h2>
+        </div>
         <p class="field-help">Nhập nội dung tiếng Việt. Hệ thống chỉ gửi những trường chữ đã thay đổi tới DeepL.</p>
-        <label>Eyebrow hero<input data-content="heroKicker" type="text"></label>
-        <label>Tiêu đề chính<input data-content="heroTitle" type="text"></label>
-        <label>Dòng thứ hai<input data-content="heroSubtitle" type="text"></label>
-        <label>Chữ viết tay<input data-content="heroScript" type="text"></label>
-        <label>Mô tả hero<textarea data-content="heroCopy" rows="3"></textarea></label>
-        <label>Tiêu đề giới thiệu<textarea data-content="aboutTitle" rows="2"></textarea></label>
-        <label>Mô tả giới thiệu<textarea data-content="aboutCopy" rows="3"></textarea></label>
-        <button class="translate-button" id="translate-button" type="button">Dịch nội dung đã thay đổi</button>
+        
+        <div class="field-group">
+          <label><span>Eyebrow hero</span><input data-content="heroKicker" type="text" placeholder="Ví dụ: Khu đô thị nghỉ dưỡng ven biển"></label>
+          <label><span>Tiêu đề chính</span><input data-content="heroTitle" type="text" placeholder="Ví dụ: Hồ Tràm"></label>
+          <label><span>Dòng thứ hai</span><input data-content="heroSubtitle" type="text" placeholder="Ví dụ: Santorini"></label>
+          <label><span>Chữ viết tay</span><input data-content="heroScript" type="text" placeholder="Ví dụ: Chạm đến thiên đường nghỉ dưỡng"></label>
+          <label><span>Mô tả hero</span><textarea data-content="heroCopy" rows="3" placeholder="Mô tả ngắn hiển thị tại phần Hero..."></textarea></label>
+          <label><span>Tiêu đề giới thiệu</span><textarea data-content="aboutTitle" rows="2" placeholder="Tiêu đề giới thiệu dự án..."></textarea></label>
+          <label><span>Mô tả giới thiệu</span><textarea data-content="aboutCopy" rows="3" placeholder="Mô tả chi tiết về dự án..."></textarea></label>
+        </div>
+
+        <button class="translate-button" id="translate-button" type="button">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+          Dịch nội dung đã thay đổi
+        </button>
         <p class="translation-status" id="translation-status" role="status"></p>
       </section>
 
-      <section class="editor-section"><h2>Phong cách</h2><div class="field-grid"><label>Font tiêu đề<select data-theme="headingFont"><option>Cormorant Garamond</option><option>Georgia</option><option>Times New Roman</option></select></label><label>Font nội dung<select data-theme="bodyFont"><option>Manrope</option><option>Arial</option><option>Georgia</option></select></label></div><div class="color-grid"><label>Màu chữ<input data-theme="ink" type="color"></label><label>Màu nền tối<input data-theme="deep" type="color"></label><label>Màu nhấn<input data-theme="gold" type="color"></label></div><div class="range-row"><label>Bo góc ảnh <output data-output="imageRadius">6px</output><input data-theme="imageRadius" type="range" min="0" max="24" step="1"></label><label>Bo góc button <output data-output="buttonRadius">6px</output><input data-theme="buttonRadius" type="range" min="0" max="24" step="1"></label></div></section>
+      <!-- Section 2: Style & Colors -->
+      <section class="editor-section">
+        <div class="section-header">
+          <span class="section-badge">02</span>
+          <h2>Phong cách</h2>
+        </div>
+        
+        <div class="field-grid">
+          <label><span>Font tiêu đề</span>
+            <select data-theme="headingFont">
+              <option>Cormorant Garamond</option>
+              <option>Georgia</option>
+              <option>Times New Roman</option>
+            </select>
+          </label>
+          <label><span>Font nội dung</span>
+            <select data-theme="bodyFont">
+              <option>Manrope</option>
+              <option>Arial</option>
+              <option>Georgia</option>
+            </select>
+          </label>
+        </div>
 
-      <section class="editor-section"><h2>Nội dung các nút</h2><p class="field-help">Chỉ thay đổi chữ hiển thị, liên kết và thiết kế vẫn được giữ nguyên.</p><label>Nút khám phá hero<input data-content="buttonHeroPrimary" type="text"></label><label>Nút booking tour<input data-content="buttonHeroBooking" type="text"></label><label>Nút giới thiệu<input data-content="buttonAbout" type="text"></label><label>Nút tiện ích<input data-content="buttonAmenities" type="text"></label><label>Nút xem bản đồ<input data-content="buttonLocation" type="text"></label><label>Nút ưu đãi<input data-content="buttonOffer" type="text"></label><label>Nút gửi liên hệ<input data-content="buttonContact" type="text"></label></section>
+        <div class="color-grid">
+          <label><span>Màu chữ</span><input data-theme="ink" type="color"></label>
+          <label><span>Màu nền tối</span><input data-theme="deep" type="color"></label>
+          <label><span>Màu nhấn</span><input data-theme="gold" type="color"></label>
+        </div>
 
-      <section class="editor-section"><h2>Thay đổi hình ảnh</h2><p class="field-help">Dán URL ảnh công khai.
-      Khi dùng CMS thật, nhóm này sẽ được thay bằng nút tải ảnh.</p><label>Ảnh hero<input data-content="imageHero" type="url" placeholder="https://..."></label><label>Ảnh giới thiệu<input data-content="imageAbout" type="url" placeholder="https://..."></label><label>Điểm nhấn 1<input data-content="imageHighlight1" type="url" placeholder="https://..."></label><label>Điểm nhấn 2<input data-content="imageHighlight2" type="url" placeholder="https://..."></label><label>Điểm nhấn 3<input data-content="imageHighlight3" type="url" placeholder="https://..."></label><label>Điểm nhấn 4<input data-content="imageHighlight4" type="url" placeholder="https://..."></label><label>Tiện ích 1<input data-content="imageAmenity1" type="url" placeholder="https://..."></label><label>Tiện ích 2<input data-content="imageAmenity2" type="url" placeholder="https://..."></label><label>Tiện ích 3<input data-content="imageAmenity3" type="url" placeholder="https://..."></label><label>Tiện ích 4<input data-content="imageAmenity4" type="url" placeholder="https://..."></label><label>Tin tức 1<input data-content="imageNews1" type="url" placeholder="https://..."></label><label>Tin tức 2<input data-content="imageNews2" type="url" placeholder="https://..."></label><label>Tin tức 3<input data-content="imageNews3" type="url" placeholder="https://..."></label></section>
+        <div class="range-row">
+          <label>
+            <div class="range-header"><span>Bo góc ảnh</span><output data-output="imageRadius">6px</output></div>
+            <input data-theme="imageRadius" type="range" min="0" max="24" step="1">
+          </label>
+          <label>
+            <div class="range-header"><span>Bo góc button</span><output data-output="buttonRadius">6px</output></div>
+            <input data-theme="buttonRadius" type="range" min="0" max="24" step="1">
+          </label>
+        </div>
+      </section>
 
+      <!-- Section 3: Buttons -->
+      <section class="editor-section">
+        <div class="section-header">
+          <span class="section-badge">03</span>
+          <h2>Nội dung các nút</h2>
+        </div>
+        <p class="field-help">Chỉ thay đổi chữ hiển thị, liên kết và thiết kế vẫn được giữ nguyên.</p>
+        
+        <div class="field-group">
+          <label><span>Nút khám phá hero</span><input data-content="buttonHeroPrimary" type="text"></label>
+          <label><span>Nút booking tour</span><input data-content="buttonHeroBooking" type="text"></label>
+          <label><span>Nút giới thiệu</span><input data-content="buttonAbout" type="text"></label>
+          <label><span>Nút tiện ích</span><input data-content="buttonAmenities" type="text"></label>
+          <label><span>Nút xem bản đồ</span><input data-content="buttonLocation" type="text"></label>
+          <label><span>Nút ưu đãi</span><input data-content="buttonOffer" type="text"></label>
+          <label><span>Nút gửi liên hệ</span><input data-content="buttonContact" type="text"></label>
+        </div>
+      </section>
+
+      <!-- Section 4: Images -->
+      <section class="editor-section">
+        <div class="section-header">
+          <span class="section-badge">04</span>
+          <h2>Thay đổi hình ảnh</h2>
+        </div>
+        <p class="field-help">Dán URL ảnh công khai (HTTPS). Khi dùng CMS thật, nhóm này sẽ được thay bằng nút tải ảnh.</p>
+        
+        <div class="field-group compact">
+          <label><span>Ảnh hero</span><input data-content="imageHero" type="url" placeholder="https://images.unsplash.com/..."></label>
+          <label><span>Ảnh giới thiệu</span><input data-content="imageAbout" type="url" placeholder="https://images.unsplash.com/..."></label>
+          <label><span>Điểm nhấn 1</span><input data-content="imageHighlight1" type="url" placeholder="https://images.unsplash.com/..."></label>
+          <label><span>Điểm nhấn 2</span><input data-content="imageHighlight2" type="url" placeholder="https://images.unsplash.com/..."></label>
+          <label><span>Điểm nhấn 3</span><input data-content="imageHighlight3" type="url" placeholder="https://images.unsplash.com/..."></label>
+          <label><span>Điểm nhấn 4</span><input data-content="imageHighlight4" type="url" placeholder="https://images.unsplash.com/..."></label>
+          <label><span>Tiện ích 1</span><input data-content="imageAmenity1" type="url" placeholder="https://images.unsplash.com/..."></label>
+          <label><span>Tiện ích 2</span><input data-content="imageAmenity2" type="url" placeholder="https://images.unsplash.com/..."></label>
+          <label><span>Tiện ích 3</span><input data-content="imageAmenity3" type="url" placeholder="https://images.unsplash.com/..."></label>
+          <label><span>Tiện ích 4</span><input data-content="imageAmenity4" type="url" placeholder="https://images.unsplash.com/..."></label>
+          <label><span>Tin tức 1</span><input data-content="imageNews1" type="url" placeholder="https://images.unsplash.com/..."></label>
+          <label><span>Tin tức 2</span><input data-content="imageNews2" type="url" placeholder="https://images.unsplash.com/..."></label>
+          <label><span>Tin tức 3</span><input data-content="imageNews3" type="url" placeholder="https://images.unsplash.com/..."></label>
+        </div>
+      </section>
+
+      <!-- Fixed / Bottom Actions -->
       <div class="publish-actions">
         <button class="save-button" id="save-only-button" type="button">Lưu thay đổi</button>
         <button class="publish-button" id="save-button" type="button">Lưu &amp; dịch tự động</button>
       </div>
     </aside>
-    <section class="preview-area"><div class="preview-toolbar"><div><small>XEM TRƯỚC</small><strong id="preview-label">Desktop</strong></div><div class="device-switcher"><button class="active" data-device="desktop" type="button">Desktop</button><button data-device="tablet" type="button">Tablet</button><button data-device="mobile" type="button">Mobile</button></div></div><div class="preview-frame-wrap"><iframe id="site-preview" src="index.html?preview=1" title="Xem trước website"></iframe></div>
+
+    <!-- Preview Area -->
+    <section class="preview-area">
+      <div class="preview-toolbar">
+        <div class="toolbar-info">
+          <small>XEM TRƯỚC HẸ THỐNG</small>
+          <strong id="preview-label">Desktop</strong>
+        </div>
+        <div class="device-switcher">
+          <button class="active" data-device="desktop" type="button" title="Chế độ Desktop">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+            <span>Desktop</span>
+          </button>
+          <button data-device="tablet" type="button" title="Chế độ Tablet">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+            <span>Tablet</span>
+          </button>
+          <button data-device="mobile" type="button" title="Chế độ Mobile">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+            <span>Mobile</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="preview-frame-wrap">
+        <div class="mockup-header">
+          <span class="dot red"></span>
+          <span class="dot yellow"></span>
+          <span class="dot green"></span>
+          <span class="mockup-title">live-preview://hotram-santorini.vn</span>
+        </div>
+        <iframe id="site-preview" src="index.html?preview=1" title="Xem trước website"></iframe>
+      </div>
     </section>
   </main>
+
   <script src="admin.js"></script>
 </body>
+
 </html>
