@@ -1,210 +1,108 @@
 const settingsKey = 'hotram-site-settings';
 
-const editableFields = [
-  'heroKicker',
-  'heroTitle',
-  'heroSubtitle',
-  'heroScript',
-  'heroCopy',
-  'aboutTitle',
-  'aboutCopy',
-  'buttonHeroPrimary',
-  'buttonHeroBooking',
-  'buttonAbout',
-  'buttonAmenities',
-  'buttonLocation',
-  'buttonOffer',
-  'buttonContact'
+const editableTranslationFields = [
+  'heroKicker', 'heroTitle', 'heroSubtitle', 'heroScript', 'heroCopy',
+  'aboutTitle', 'aboutCopy',
+  'buttonHeroPrimary', 'buttonHeroBooking', 'buttonAbout',
+  'buttonAmenities', 'buttonLocation', 'buttonOffer', 'buttonContact'
 ];
 
 const defaults = {
   content: {
     heroKicker: 'Khu đô thị nghỉ dưỡng ven biển',
-    heroTitle: 'Hồ Tràm',
-    heroSubtitle: 'Santorini',
-    heroScript: 'Chạm đến thiên đường nghỉ dưỡng',
+    heroTitle: 'Hồ Tràm', heroSubtitle: 'Santorini', heroScript: 'Chạm đến thiên đường nghỉ dưỡng',
     heroCopy: 'Dự án nghỉ dưỡng cao cấp tại Hồ Tràm – Vũng Tàu,\nnơi thiên nhiên hoang sơ hòa quyện cùng phong cách sống đẳng cấp.',
     aboutTitle: 'Hồ Tràm – viên ngọc\nmới của bờ biển phía Nam',
     aboutCopy: 'Hồ Tràm Santorini là tổ hợp nghỉ dưỡng – giải trí – đầu tư đẳng cấp, được quy hoạch bài bản với tầm nhìn trở thành điểm đến hàng đầu khu vực.',
-    buttonHeroPrimary: 'Khám phá dự án',
-    buttonHeroBooking: 'Booking tour',
-    buttonAbout: 'Tìm hiểu thêm',
-    buttonAmenities: 'Xem thêm tiện ích',
-    buttonLocation: 'Xem bản đồ',
-    buttonOffer: 'Đăng ký ngay',
-    buttonContact: 'Gọi thông tin',
-    imageHero: 'https://images.unsplash.com/photo-1510414842594-a61c69b5ae57?auto=format&fit=crop&w=2200&q=90',
-    imageAbout: 'https://images.unsplash.com/photo-1544984243-ec57ea16fe25?auto=format&fit=crop&w=1200&q=85',
-    imageHighlight1: 'https://images.unsplash.com/photo-1507525429940-1e3c0e1e7c67?auto=format&fit=crop&w=900&q=85',
-    imageHighlight2: 'https://images.unsplash.com/photo-1605281317010-fe5ffe798166?auto=format&fit=crop&w=900&q=85',
-    imageHighlight3: 'https://images.unsplash.com/photo-1587174486073-ae5e5cff23aa?auto=format&fit=crop&w=900&q=85',
-    imageHighlight4: 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=900&q=85',
-    imageAmenity1: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=900&q=85',
-    imageAmenity2: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=900&q=85',
-    imageAmenity3: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=900&q=85',
-    imageAmenity4: 'https://images.unsplash.com/photo-1554068865-24cecd4e34b8?auto=format&fit=crop&w=900&q=85',
-    imageNews1: 'https://images.unsplash.com/photo-1473116763249-2faaef81ccda?auto=format&fit=crop&w=800&q=85',
-    imageNews2: 'https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&w=800&q=85',
-    imageNews3: 'https://images.unsplash.com/photo-1601918774946-25832a4be0d6?auto=format&fit=crop&w=800&q=85'
+    buttonHeroPrimary: 'Khám phá dự án', buttonHeroBooking: 'Booking tour', buttonAbout: 'Tìm hiểu thêm',
+    buttonAmenities: 'Xem thêm tiện ích', buttonLocation: 'Xem bản đồ', buttonOffer: 'Đăng ký ngay', buttonContact: 'Gọi thông tin',
+    imageHero: '', imageAbout: '', imageHighlight1: '', imageHighlight2: '', imageHighlight3: '', imageHighlight4: '',
+    imageAmenity1: '', imageAmenity2: '', imageAmenity3: '', imageAmenity4: '', imageNews1: '', imageNews2: '', imageNews3: ''
   },
-  theme: {
-    headingFont: 'Cormorant Garamond',
-    bodyFont: 'Manrope',
-    ink: '#102f38',
-    deep: '#082832',
-    gold: '#c79d5a',
-    imageRadius: 6,
-    buttonRadius: 6
-  }
+  theme: { headingFont: 'Cormorant Garamond', bodyFont: 'Manrope', ink: '#102f38', deep: '#082832', gold: '#c79d5a', imageRadius: 6, buttonRadius: 6 }
 };
 
 let settings = loadSettings();
-
 const preview = document.querySelector('#site-preview');
 const saveState = document.querySelector('#save-state');
+const status = document.querySelector('#translation-status');
 
-function clone(value) {
-  return JSON.parse(JSON.stringify(value));
-}
-
-function hasTranslations() {
-  return Boolean(
-    settings.translations &&
-    Object.values(settings.translations).some(
-      (language) => language && typeof language === 'object' && Object.keys(language).length
-    )
-  );
-}
-
-function ensureTranslationSource() {
-  settings.translationSource = settings.translationSource || {};
-
-  // Existing projects did not have translationSource.
-  // If translations already exist, the current content is the last known
-  // source for fields that are not tracked yet.
-  if (hasTranslations()) {
-    editableFields.forEach((field) => {
-      if (!Object.prototype.hasOwnProperty.call(settings.translationSource, field)) {
-        settings.translationSource[field] = settings.content[field] ?? '';
-      }
-    });
+function loadSettings() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(settingsKey));
+    if (!saved) return structuredClone(defaults);
+    return {
+      ...structuredClone(defaults),
+      ...saved,
+      content: { ...defaults.content, ...(saved.content || {}) },
+      theme: { ...defaults.theme, ...(saved.theme || {}) },
+      translations: saved.translations || {},
+      translationSource: saved.translationSource || {}
+    };
+  } catch {
+    return structuredClone(defaults);
   }
 }
 
-function getChangedTextFields() {
-  ensureTranslationSource();
+function persistLocal() {
+  localStorage.setItem(settingsKey, JSON.stringify(settings));
+}
 
-  // No translation cache yet: the first translation must translate all
-  // editable text fields.
-  if (!hasTranslations()) {
-    return editableFields.filter((field) => String(settings.content[field] ?? '').trim() !== '');
+async function parseJsonResponse(response) {
+  const raw = await response.text();
+  let result = {};
+  try { result = raw ? JSON.parse(raw) : {}; } catch { result = {}; }
+  if (!response.ok || result.success === false) {
+    throw new Error(result.message || `API lỗi HTTP ${response.status}.`);
   }
-
-  return editableFields.filter((field) => {
-    const current = String(settings.content[field] ?? '');
-    const previous = String(settings.translationSource[field] ?? '');
-    return current !== previous && current.trim() !== '';
-  });
+  return result;
 }
 
 async function loadSharedSettings() {
   try {
-    const response = await fetch('/api/settings', {
-      headers: { Accept: 'application/json' }
-    });
-
-    const result = await response.json();
-
-    if (response.ok && result.success && result.settings) {
+    const response = await fetch('/api/settings', { headers: { Accept: 'application/json' } });
+    const result = await parseJsonResponse(response);
+    if (result.settings) {
       settings = {
         ...settings,
         ...result.settings,
-        content: {
-          ...settings.content,
-          ...result.settings.content
-        },
-        theme: {
-          ...settings.theme,
-          ...result.settings.theme
-        }
+        content: { ...settings.content, ...(result.settings.content || {}) },
+        theme: { ...settings.theme, ...(result.settings.theme || {}) },
+        translations: result.settings.translations || settings.translations || {},
+        translationSource: result.settings.translationSource || settings.translationSource || {}
       };
-
-      ensureTranslationSource();
-      localStorage.setItem(settingsKey, JSON.stringify(settings));
+      persistLocal();
     }
   } catch {
-    // Keep local settings available when developing with a static server.
+    // Static localhost development can still edit locally.
   }
-
   fillFields();
 }
 
 async function saveSharedSettings() {
-  const token =
-    window.localStorage.getItem('hotram-admin-token') ||
-    window.prompt('Nhập Admin Editor Token');
-
-  if (token) {
-    window.localStorage.setItem('hotram-admin-token', token);
-  }
+  const token = localStorage.getItem('hotram-admin-token') || window.prompt('Nhập Admin Editor Token');
+  if (!token) throw new Error('Chưa có Admin Editor Token nên chưa thể đồng bộ lên Vercel.');
+  localStorage.setItem('hotram-admin-token', token);
 
   const response = await fetch('/api/settings', {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
       Accept: 'application/json',
-      'x-admin-token': token || ''
+      'x-admin-token': token
     },
     body: JSON.stringify({ settings })
   });
-
-  const result = await response.json();
-
-  if (!response.ok || !result.success) {
-    throw new Error(
-      result.message || 'Không thể đồng bộ settings lên server.'
-    );
-  }
-}
-
-function loadSettings() {
-  try {
-    const saved = JSON.parse(localStorage.getItem(settingsKey));
-
-    if (!saved) {
-      return clone(defaults);
-    }
-
-    if (saved.content?.imageHighlight1?.includes('1605281317010')) {
-      saved.content.imageHighlight1 = defaults.content.imageHighlight1;
-    }
-
-    return {
-      ...defaults,
-      ...saved,
-      content: {
-        ...defaults.content,
-        ...saved.content
-      },
-      theme: {
-        ...defaults.theme,
-        ...saved.theme
-      }
-    };
-  } catch {
-    return clone(defaults);
-  }
+  await parseJsonResponse(response);
 }
 
 function fillFields() {
   document.querySelectorAll('[data-content]').forEach((field) => {
     field.value = settings.content[field.dataset.content] ?? '';
   });
-
   document.querySelectorAll('[data-theme]').forEach((field) => {
     field.value = settings.theme[field.dataset.theme] ?? '';
   });
-
   document.querySelectorAll('[data-output]').forEach((output) => {
     output.textContent = `${settings.theme[output.dataset.output]}px`;
   });
@@ -214,121 +112,84 @@ function readFields() {
   document.querySelectorAll('[data-content]').forEach((field) => {
     settings.content[field.dataset.content] = field.value;
   });
-
   document.querySelectorAll('[data-theme]').forEach((field) => {
-    settings.theme[field.dataset.theme] =
-      field.type === 'range' ? Number(field.value) : field.value;
+    settings.theme[field.dataset.theme] = field.type === 'range' ? Number(field.value) : field.value;
   });
 }
 
-function saveLocalAndRefreshPreview() {
+function refreshPreview() {
   readFields();
-  localStorage.setItem(settingsKey, JSON.stringify(settings));
-  preview.contentWindow.location.reload();
+  persistLocal();
+  if (preview?.contentWindow) preview.contentWindow.location.reload();
 }
 
-document
-  .querySelectorAll('[data-content],[data-theme]')
-  .forEach((field) => {
-    field.addEventListener('input', () => {
-      readFields();
-      localStorage.setItem(settingsKey, JSON.stringify(settings));
-
-      saveState.textContent = 'Đang chỉnh sửa';
-      saveState.classList.add('unsaved');
-
-      if (field.type === 'range') {
-        document.querySelector(
-          `[data-output="${field.dataset.theme}"]`
-        ).textContent = `${field.value}px`;
-      }
-
-      preview.contentWindow.location.reload();
-    });
+function getChangedTranslationFields() {
+  const baseline = settings.translationSource || {};
+  return editableTranslationFields.filter((field) => {
+    const current = String(settings.content[field] ?? '');
+    return current !== String(baseline[field] ?? '');
   });
+}
 
-async function translateContent({ changedFields = null } = {}) {
-  const status = document.querySelector('#translation-status');
+function setTranslationStatus(message, type = '') {
+  if (!status) return;
+  status.textContent = message;
+  status.className = `translation-status ${type}`.trim();
+}
+
+function isLocalStaticServer() {
+  return ['localhost', '127.0.0.1', '0.0.0.0'].includes(window.location.hostname);
+}
+
+async function translateContent({ saveAfter = true } = {}) {
   const button = document.querySelector('#translate-button');
-
   readFields();
 
-  const fieldsToTranslate = changedFields || getChangedTextFields();
+  const fields = getChangedTranslationFields();
+  if (!fields.length) {
+    setTranslationStatus('Không có nội dung chữ nào thay đổi. DeepL không được gọi.', 'success');
+    return { translated: false, fields: [] };
+  }
 
-  if (!fieldsToTranslate.length) {
-    status.textContent =
-      'Không có nội dung chữ mới thay đổi. Không gọi DeepL.';
-    status.className = 'translation-status success';
-    return false;
+  if (isLocalStaticServer()) {
+    setTranslationStatus('Bạn đang mở Admin bằng Live Server. API DeepL chỉ chạy khi deploy lên Vercel (/api/translate).', 'error');
+    return { translated: false, fields, error: true };
   }
 
   button.disabled = true;
   button.textContent = 'Đang dịch...';
-  status.textContent = 'Đang dịch nội dung đã thay đổi...';
-  status.className = 'translation-status';
+  setTranslationStatus(`Đang dịch ${fields.length} trường thay đổi sang EN / DE / KO / 中文...`);
 
   try {
-    const content = Object.fromEntries(
-      fieldsToTranslate.map((field) => [
-        field,
-        settings.content[field] ?? ''
-      ])
-    );
-
     const response = await fetch('/api/translate', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json'
-      },
-      body: JSON.stringify({
-        content,
-        fields: fieldsToTranslate
-      })
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      body: JSON.stringify({ content: settings.content, fields })
     });
+    const result = await parseJsonResponse(response);
 
-    const result = await response.json();
-
-    if (!response.ok || !result.success) {
-      throw new Error(
-        result.message || 'Không thể dịch nội dung.'
-      );
+    settings.translations = { ...(settings.translations || {}) };
+    for (const language of Object.keys(result.translations || {})) {
+      settings.translations[language] = {
+        ...(settings.translations[language] || {}),
+        ...(result.translations[language] || {})
+      };
     }
 
-    settings.translations = {
-      ...(settings.translations || {})
-    };
-
-    Object.entries(result.translations || {}).forEach(
-      ([language, languageTranslations]) => {
-        settings.translations[language] = {
-          ...(settings.translations[language] || {}),
-          ...languageTranslations
-        };
-      }
-    );
-
-    settings.translationSource = {
-      ...(settings.translationSource || {})
-    };
-
-    fieldsToTranslate.forEach((field) => {
-      settings.translationSource[field] =
-        settings.content[field] ?? '';
+    settings.translationSource = { ...(settings.translationSource || {}) };
+    fields.forEach((field) => {
+      settings.translationSource[field] = settings.content[field];
     });
 
-    localStorage.setItem(settingsKey, JSON.stringify(settings));
-    preview.contentWindow.location.reload();
+    persistLocal();
+    if (saveAfter) await saveSharedSettings();
+    if (preview?.contentWindow) preview.contentWindow.location.reload();
 
-    status.textContent =
-      `Đã dịch ${fieldsToTranslate.length} nội dung sang EN / DE / KO / 中文.`;
-    status.className = 'translation-status success';
-
-    return true;
+    setTranslationStatus(`Đã dịch và đồng bộ ${fields.length} trường thay đổi.`, 'success');
+    return { translated: true, fields };
   } catch (error) {
-    status.textContent = error.message;
-    status.className = 'translation-status error';
-    return false;
+    setTranslationStatus(error.message || 'Dịch nội dung không thành công.', 'error');
+    return { translated: false, fields, error: true };
   } finally {
     button.disabled = false;
     button.textContent = 'Dịch nội dung đã thay đổi';
@@ -337,19 +198,14 @@ async function translateContent({ changedFields = null } = {}) {
 
 async function saveOnly() {
   const button = document.querySelector('#save-only-button');
-
   readFields();
-  localStorage.setItem(settingsKey, JSON.stringify(settings));
-
+  persistLocal();
   button.disabled = true;
   button.textContent = 'Đang lưu...';
-
   try {
     await saveSharedSettings();
-
-    preview.contentWindow.location.reload();
-
-    saveState.textContent = 'Đã lưu thay đổi — không gọi DeepL';
+    if (preview?.contentWindow) preview.contentWindow.location.reload();
+    saveState.textContent = 'Đã lưu và đồng bộ';
     saveState.classList.remove('unsaved');
   } catch (error) {
     saveState.textContent = error.message;
@@ -361,90 +217,67 @@ async function saveOnly() {
 }
 
 async function saveAndTranslate() {
-  const saveButton = document.querySelector('#save-button');
-  const status = document.querySelector('#translation-status');
-
+  const button = document.querySelector('#save-button');
   readFields();
-
-  const fieldsToTranslate = getChangedTextFields();
-
-  saveButton.disabled = true;
-  saveButton.textContent = fieldsToTranslate.length
-    ? 'Đang lưu & dịch...'
-    : 'Đang lưu...';
+  persistLocal();
+  button.disabled = true;
+  button.textContent = 'Đang xử lý...';
 
   try {
-    if (fieldsToTranslate.length) {
-      const translated = await translateContent({
-        changedFields: fieldsToTranslate
-      });
+    const fields = getChangedTranslationFields();
 
-      if (!translated) {
-        throw new Error(
-          'Dịch nội dung không thành công. Thay đổi chưa được đồng bộ.'
-        );
-      }
-    } else {
-      status.textContent =
-        'Không có text thay đổi nên không gọi DeepL.';
-      status.className = 'translation-status success';
+    if (fields.length) {
+      const result = await translateContent({ saveAfter: false });
+      if (result.error) throw new Error('Dịch chưa thành công nên thay đổi chưa được đồng bộ.');
     }
 
     await saveSharedSettings();
-
-    localStorage.setItem(settingsKey, JSON.stringify(settings));
-    preview.contentWindow.location.reload();
-
-    saveState.textContent = fieldsToTranslate.length
-      ? `Đã lưu & dịch ${fieldsToTranslate.length} nội dung`
-      : 'Đã lưu thay đổi — không gọi DeepL';
-
+    if (preview?.contentWindow) preview.contentWindow.location.reload();
+    saveState.textContent = fields.length
+      ? `Đã lưu + dịch ${fields.length} trường thay đổi`
+      : 'Đã lưu (không cần gọi DeepL)';
     saveState.classList.remove('unsaved');
   } catch (error) {
     saveState.textContent = error.message;
     saveState.classList.add('unsaved');
   } finally {
-    saveButton.disabled = false;
-    saveButton.textContent = 'Lưu & dịch tự động';
+    button.disabled = false;
+    button.textContent = 'Lưu & dịch tự động';
   }
 }
 
-document
-  .querySelector('#save-only-button')
-  .addEventListener('click', saveOnly);
-
-document
-  .querySelector('#save-button')
-  .addEventListener('click', saveAndTranslate);
-
-document
-  .querySelector('#translate-button')
-  .addEventListener('click', () => translateContent());
-
-document
-  .querySelector('#reset-button')
-  .addEventListener('click', () => {
-    settings = clone(defaults);
-    localStorage.setItem(settingsKey, JSON.stringify(settings));
-    fillFields();
-    saveLocalAndRefreshPreview();
+document.querySelectorAll('[data-content],[data-theme]').forEach((field) => {
+  field.addEventListener('input', () => {
+    readFields();
+    persistLocal();
+    saveState.textContent = 'Đang chỉnh sửa';
+    saveState.classList.add('unsaved');
+    if (field.type === 'range') {
+      const output = document.querySelector(`[data-output="${field.dataset.theme}"]`);
+      if (output) output.textContent = `${field.value}px`;
+    }
+    if (preview?.contentWindow) preview.contentWindow.location.reload();
   });
+});
+
+document.querySelector('#save-only-button')?.addEventListener('click', saveOnly);
+document.querySelector('#save-button')?.addEventListener('click', saveAndTranslate);
+document.querySelector('#translate-button')?.addEventListener('click', () => translateContent({ saveAfter: true }));
+
+document.querySelector('#reset-button')?.addEventListener('click', () => {
+  settings = structuredClone(defaults);
+  persistLocal();
+  fillFields();
+  refreshPreview();
+});
 
 document.querySelectorAll('[data-device]').forEach((button) => {
   button.addEventListener('click', () => {
-    document
-      .querySelectorAll('[data-device]')
-      .forEach((item) => item.classList.remove('active'));
-
+    document.querySelectorAll('[data-device]').forEach((item) => item.classList.remove('active'));
     button.classList.add('active');
-
-    preview.className =
-      button.dataset.device === 'desktop'
-        ? ''
-        : button.dataset.device;
-
-    document.querySelector('#preview-label').textContent =
-      button.textContent;
+    if (preview) preview.className = button.dataset.device === 'desktop' ? '' : button.dataset.device;
+    const label = document.querySelector('#preview-label');
+    if (label) label.textContent = button.textContent;
   });
 });
 
