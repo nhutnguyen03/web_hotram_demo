@@ -19,13 +19,16 @@ const defaults = {
     imageHero: '', imageAbout: '', imageHighlight1: '', imageHighlight2: '', imageHighlight3: '', imageHighlight4: '',
     imageAmenity1: '', imageAmenity2: '', imageAmenity3: '', imageAmenity4: '', imageNews1: '', imageNews2: '', imageNews3: ''
   },
-  theme: { headingFont: 'Cormorant Garamond', bodyFont: 'Manrope', ink: '#102f38', deep: '#082832', gold: '#c79d5a', imageRadius: 6, buttonRadius: 6 }
+  theme: { headingFont: 'Cormorant Garamond', bodyFont: 'Manrope', ink: '#102f38', deep: '#082832', gold: '#c79d5a', imageRadius: 6, buttonRadius: 6 },
+  customFonts: [],
+  textStyles: {}
 };
 
 let settings = loadSettings();
 const preview = document.querySelector('#site-preview');
 const saveState = document.querySelector('#save-state');
 const status = document.querySelector('#translation-status');
+let activeFieldKey = null;
 
 function loadSettings() {
   try {
@@ -36,6 +39,8 @@ function loadSettings() {
       ...saved,
       content: { ...defaults.content, ...(saved.content || {}) },
       theme: { ...defaults.theme, ...(saved.theme || {}) },
+      customFonts: saved.customFonts || [],
+      textStyles: saved.textStyles || {},
       translations: saved.translations || {},
       translationSource: saved.translationSource || {}
     };
@@ -68,6 +73,8 @@ async function loadSharedSettings() {
         ...result.settings,
         content: { ...settings.content, ...(result.settings.content || {}) },
         theme: { ...settings.theme, ...(result.settings.theme || {}) },
+        customFonts: result.settings.customFonts || settings.customFonts || [],
+        textStyles: result.settings.textStyles || settings.textStyles || {},
         translations: result.settings.translations || settings.translations || {},
         translationSource: result.settings.translationSource || settings.translationSource || {}
       };
@@ -76,7 +83,11 @@ async function loadSharedSettings() {
   } catch {
     // Static localhost development can still edit locally.
   }
+  applyCustomFonts();
   fillFields();
+  updateFontDropdowns();
+  renderFontTags();
+  initFormatButtons();
 }
 
 async function saveSharedSettings() {
@@ -246,6 +257,238 @@ async function saveAndTranslate() {
   }
 }
 
+/* Custom Font Import Logic */
+function applyCustomFonts() {
+  let styleEl = document.querySelector('#custom-fonts-style');
+  if (!styleEl) {
+    styleEl = document.createElement('style');
+    styleEl.id = 'custom-fonts-style';
+    document.head.appendChild(styleEl);
+  }
+  styleEl.textContent = (settings.customFonts || []).map((font) => `
+    @font-face {
+      font-family: '${font.name}';
+      src: url('${font.dataUrl}');
+    }
+  `).join('\n');
+}
+
+function updateFontDropdowns() {
+  const fontSelects = [
+    document.querySelector('[data-theme="headingFont"]'),
+    document.querySelector('[data-theme="bodyFont"]'),
+    document.querySelector('#modal-font-family')
+  ];
+
+  fontSelects.forEach((select) => {
+    if (!select) return;
+    const existingValues = Array.from(select.options).map((opt) => opt.value);
+    (settings.customFonts || []).forEach((font) => {
+      if (!existingValues.includes(font.name)) {
+        const option = document.createElement('option');
+        option.value = font.name;
+        option.textContent = `${font.name} (File đã import)`;
+        select.appendChild(option);
+      }
+    });
+  });
+}
+
+function renderFontTags() {
+  const container = document.querySelector('#imported-fonts-list');
+  if (!container) return;
+  container.innerHTML = (settings.customFonts || []).map((font, idx) => `
+    <span class="font-tag">
+      🔤 ${font.name}
+      <span class="font-tag-remove" data-font-index="${idx}">&times;</span>
+    </span>
+  `).join('');
+
+  container.querySelectorAll('.font-tag-remove').forEach((btn) => {
+    btn.onclick = () => {
+      const index = Number(btn.dataset.fontIndex);
+      settings.customFonts.splice(index, 1);
+      persistLocal();
+      applyCustomFonts();
+      renderFontTags();
+      refreshPreview();
+    };
+  });
+}
+
+document.querySelector('#font-file-input')?.addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const rawName = file.name.replace(/\.[^/.]+$/, '').replace(/[^a-zA-Z0-9_\-\s]/g, '');
+  const fontName = window.prompt('Nhập tên hiển thị cho Font chữ này:', rawName) || rawName;
+  if (!fontName) return;
+
+  const reader = new FileReader();
+  reader.onload = (event) => {
+    const dataUrl = event.target.result;
+    settings.customFonts = settings.customFonts || [];
+    settings.customFonts.push({ name: fontName, dataUrl });
+    persistLocal();
+    applyCustomFonts();
+    updateFontDropdowns();
+    renderFontTags();
+    refreshPreview();
+    e.target.value = '';
+  };
+  reader.readAsDataURL(file);
+});
+
+/* Per-field Format Trigger Buttons */
+function initFormatButtons() {
+  document.querySelectorAll('label').forEach((label) => {
+    const input = label.querySelector('[data-content]');
+    if (!input || label.querySelector('.format-trigger-btn')) return;
+    const fieldKey = input.dataset.content;
+    if (input.type === 'url' || fieldKey.startsWith('image')) return;
+    const span = label.querySelector('span');
+    if (!span) return;
+
+    const row = document.createElement('div');
+    row.className = 'field-label-row';
+
+    const spanText = span.cloneNode(true);
+    const formatBtn = document.createElement('button');
+    formatBtn.type = 'button';
+    formatBtn.className = 'format-trigger-btn';
+    if (settings.textStyles && settings.textStyles[fieldKey]) formatBtn.classList.add('has-custom-style');
+    formatBtn.innerHTML = '🎨 Kiểu chữ';
+    formatBtn.title = 'Tùy chỉnh font, kích cỡ, màu sắc, căn lề';
+    formatBtn.onclick = (event) => {
+      event.preventDefault();
+      openTextStyleModal(fieldKey, spanText.textContent);
+    };
+
+    row.appendChild(spanText);
+    row.appendChild(formatBtn);
+    span.replaceWith(row);
+  });
+}
+
+/* Modal Formatting Logic */
+const modal = document.querySelector('#text-style-modal');
+const modalTitle = document.querySelector('#modal-field-title');
+const modalFontFamily = document.querySelector('#modal-font-family');
+const modalFontSize = document.querySelector('#modal-font-size');
+const modalColorPicker = document.querySelector('#modal-color-picker');
+const modalColorHex = document.querySelector('#modal-color-hex');
+const modalAlignButtons = document.querySelectorAll('#modal-text-align-group button');
+const modalBtnBold = document.querySelector('#modal-btn-bold');
+const modalBtnItalic = document.querySelector('#modal-btn-italic');
+const modalBtnUnderline = document.querySelector('#modal-btn-underline');
+
+let activeAlign = '';
+let isBold = false;
+let isItalic = false;
+let isUnderline = false;
+
+function openTextStyleModal(fieldKey, labelText) {
+  activeFieldKey = fieldKey;
+  if (modalTitle) modalTitle.textContent = `Tùy chỉnh kiểu chữ: ${labelText || fieldKey}`;
+  updateFontDropdowns();
+
+  const currentStyle = (settings.textStyles && settings.textStyles[fieldKey]) || {};
+  if (modalFontFamily) modalFontFamily.value = currentStyle.fontFamily || '';
+  if (modalFontSize) modalFontSize.value = currentStyle.fontSize ? currentStyle.fontSize.replace('px', '') : '';
+  if (modalColorPicker) modalColorPicker.value = currentStyle.color || '#173336';
+  if (modalColorHex) modalColorHex.value = currentStyle.color || '';
+
+  activeAlign = currentStyle.textAlign || '';
+  modalAlignButtons.forEach((btn) => {
+    btn.classList.toggle('active', btn.dataset.align === activeAlign);
+  });
+
+  isBold = currentStyle.fontWeight === '700' || currentStyle.fontWeight === 'bold';
+  isItalic = currentStyle.fontStyle === 'italic';
+  isUnderline = currentStyle.textDecoration === 'underline';
+
+  modalBtnBold?.classList.toggle('active', isBold);
+  modalBtnItalic?.classList.toggle('active', isItalic);
+  modalBtnUnderline?.classList.toggle('active', isUnderline);
+
+  if (modal) modal.style.display = 'flex';
+}
+
+function closeTextStyleModal() {
+  if (modal) modal.style.display = 'none';
+  activeFieldKey = null;
+}
+
+modalColorPicker?.addEventListener('input', () => {
+  if (modalColorHex) modalColorHex.value = modalColorPicker.value;
+});
+modalColorHex?.addEventListener('input', () => {
+  if (modalColorPicker && /^#[0-9A-F]{6}$/i.test(modalColorHex.value)) {
+    modalColorPicker.value = modalColorHex.value;
+  }
+});
+
+modalAlignButtons.forEach((btn) => {
+  btn.onclick = () => {
+    if (activeAlign === btn.dataset.align) {
+      activeAlign = '';
+      btn.classList.remove('active');
+    } else {
+      activeAlign = btn.dataset.align;
+      modalAlignButtons.forEach((b) => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+  };
+});
+
+modalBtnBold?.addEventListener('click', () => {
+  isBold = !isBold;
+  modalBtnBold.classList.toggle('active', isBold);
+});
+
+modalBtnItalic?.addEventListener('click', () => {
+  isItalic = !isItalic;
+  modalBtnItalic.classList.toggle('active', isItalic);
+});
+
+modalBtnUnderline?.addEventListener('click', () => {
+  isUnderline = !isUnderline;
+  modalBtnUnderline.classList.toggle('active', isUnderline);
+});
+
+document.querySelector('#modal-close-btn')?.addEventListener('click', closeTextStyleModal);
+
+document.querySelector('#modal-save-field-btn')?.addEventListener('click', () => {
+  if (!activeFieldKey) return;
+  settings.textStyles = settings.textStyles || {};
+
+  const styleObj = {};
+  if (modalFontFamily?.value) styleObj.fontFamily = modalFontFamily.value;
+  if (modalFontSize?.value) styleObj.fontSize = `${modalFontSize.value}px`;
+  if (modalColorHex?.value) styleObj.color = modalColorHex.value;
+  if (activeAlign) styleObj.textAlign = activeAlign;
+  if (isBold) styleObj.fontWeight = '700';
+  if (isItalic) styleObj.fontStyle = 'italic';
+  if (isUnderline) styleObj.textDecoration = 'underline';
+
+  if (Object.keys(styleObj).length > 0) {
+    settings.textStyles[activeFieldKey] = styleObj;
+  } else {
+    delete settings.textStyles[activeFieldKey];
+  }
+
+  persistLocal();
+  refreshPreview();
+  closeTextStyleModal();
+});
+
+document.querySelector('#modal-reset-field-btn')?.addEventListener('click', () => {
+  if (!activeFieldKey) return;
+  if (settings.textStyles) delete settings.textStyles[activeFieldKey];
+  persistLocal();
+  refreshPreview();
+  closeTextStyleModal();
+});
+
 document.querySelectorAll('[data-content],[data-theme]').forEach((field) => {
   field.addEventListener('input', () => {
     readFields();
@@ -268,6 +511,8 @@ document.querySelector('#reset-button')?.addEventListener('click', () => {
   settings = structuredClone(defaults);
   persistLocal();
   fillFields();
+  applyCustomFonts();
+  renderFontTags();
   refreshPreview();
 });
 

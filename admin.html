@@ -160,6 +160,24 @@
         </div>
       </section>
 
+      <!-- Section 5: Import Font Chữ -->
+      <section class="editor-section">
+        <div class="section-header">
+          <span class="section-badge">05</span>
+          <h2>Import Font chữ</h2>
+        </div>
+        <p class="field-help">Tải file font từ máy tính của bạn (.ttf, .otf, .woff, .woff2) để áp dụng cho bất kỳ văn bản nào trên website.</p>
+        
+        <div class="font-import-section">
+          <label class="font-upload-button" for="font-file-input">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+            <span>Chọn file font để tải lên...</span>
+          </label>
+          <input type="file" id="font-file-input" accept=".ttf,.otf,.woff,.woff2" style="display: none;">
+          <div id="imported-fonts-list" class="imported-fonts-list"></div>
+        </div>
+      </section>
+
       <!-- Fixed / Bottom Actions -->
       <div class="publish-actions">
         <button class="save-button" id="save-only-button" type="button">Lưu thay đổi</button>
@@ -171,7 +189,7 @@
     <section class="preview-area">
       <div class="preview-toolbar">
         <div class="toolbar-info">
-          <small>XEM TRƯỚC HẸ THỐNG</small>
+          <small>XEM TRƯỚC HỆ THỐNG</small>
           <strong id="preview-label">Desktop</strong>
         </div>
         <div class="device-switcher">
@@ -201,6 +219,68 @@
       </div>
     </section>
   </main>
+
+  <!-- Modal Tùy chỉnh Định dạng Text -->
+  <div class="text-style-modal-overlay" id="text-style-modal" style="display: none;">
+    <div class="text-style-modal-card">
+      <div class="modal-header">
+        <h3 id="modal-field-title">Tùy chỉnh định dạng Text</h3>
+        <button class="modal-close" id="modal-close-btn" type="button">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-grid">
+          <label>
+            <span>Font chữ</span>
+            <select id="modal-font-family">
+              <option value="">(Mặc định)</option>
+              <option value="Cormorant Garamond">Cormorant Garamond</option>
+              <option value="Manrope">Manrope</option>
+              <option value="Parisienne">Parisienne</option>
+              <option value="Georgia">Georgia</option>
+              <option value="Arial">Arial</option>
+              <option value="Times New Roman">Times New Roman</option>
+            </select>
+          </label>
+          <label>
+            <span>Kích cỡ chữ (px)</span>
+            <input type="number" id="modal-font-size" placeholder="Ví dụ: 18" min="8" max="150">
+          </label>
+        </div>
+
+        <div class="modal-grid">
+          <label>
+            <span>Màu chữ</span>
+            <div class="color-picker-row">
+              <input type="color" id="modal-color-picker">
+              <input type="text" id="modal-color-hex" placeholder="#173336">
+            </div>
+          </label>
+          <label>
+            <span>Căn lề chữ</span>
+            <div class="button-toggle-group" id="modal-text-align-group">
+              <button type="button" data-align="left" title="Căn trái">Trái</button>
+              <button type="button" data-align="center" title="Căn giữa">Giữa</button>
+              <button type="button" data-align="right" title="Căn phải">Phải</button>
+              <button type="button" data-align="justify" title="Căn đều">Đều</button>
+            </div>
+          </label>
+        </div>
+
+        <div class="modal-row">
+          <span>Định dạng kiểu dáng</span>
+          <div class="style-toggle-buttons">
+            <button type="button" id="modal-btn-bold" class="toggle-btn"><b>B</b> In đậm</button>
+            <button type="button" id="modal-btn-italic" class="toggle-btn"><i>I</i> In nghiêng</button>
+            <button type="button" id="modal-btn-underline" class="toggle-btn"><u>U</u> Gạch chân</button>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="modal-reset-field-btn" class="quiet-button">Đặt lại kiểu chữ này</button>
+        <button type="button" id="modal-save-field-btn" class="save-button">Áp dụng</button>
+      </div>
+    </div>
+  </div>
 
   <script src="admin.js"></script>
 </body>

@@ -1,3 +1,14 @@
+// Preloader fade-out transition
+window.addEventListener('DOMContentLoaded', () => {
+  const preloader = document.getElementById('preloader');
+  if (preloader) {
+    setTimeout(() => {
+      preloader.classList.add('fade-out');
+      document.body.classList.add('preloader-done');
+    }, 1800);
+  }
+});
+
 const menuButton = document.querySelector('.menu-toggle');
 const navigation = document.querySelector('.main-nav');
 const siteHeader = document.querySelector('.site-header');

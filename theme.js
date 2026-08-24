@@ -116,6 +116,56 @@ function applySiteSettings(settings = getSiteSettings()) {
   root.style.setProperty('--image-radius', `${theme.imageRadius}px`);
   root.style.setProperty('--button-radius', `${theme.buttonRadius}px`);
 
+  // Apply imported custom fonts
+  if (settings.customFonts && settings.customFonts.length) {
+    let fontStyleEl = document.querySelector('#custom-fonts-style');
+    if (!fontStyleEl) {
+      fontStyleEl = document.createElement('style');
+      fontStyleEl.id = 'custom-fonts-style';
+      document.head.appendChild(fontStyleEl);
+    }
+    fontStyleEl.textContent = settings.customFonts.map((font) => `
+      @font-face {
+        font-family: '${font.name}';
+        src: url('${font.dataUrl}');
+      }
+    `).join('\n');
+  }
+
+  // Apply per-field custom text styles
+  const fieldSelectorMap = {
+    heroKicker: '.hero .eyebrow',
+    heroTitle: '.hero h1',
+    heroSubtitle: '.hero h1 em',
+    heroScript: '.hero .script',
+    heroCopy: '.hero .hero-copy',
+    aboutTitle: '#about h2',
+    aboutCopy: '#about .section-copy > p:not(.eyebrow)',
+    buttonHeroPrimary: '.hero .gold-button',
+    buttonHeroBooking: '.hero .outline-button',
+    buttonAbout: '#about .text-button',
+    buttonAmenities: '#amenities .text-button',
+    buttonLocation: '.location .text-button',
+    buttonOffer: '.offer .gold-button',
+    buttonContact: '#contact button[type="submit"]'
+  };
+
+  if (settings.textStyles) {
+    Object.entries(settings.textStyles).forEach(([key, styleObj]) => {
+      const selector = fieldSelectorMap[key];
+      if (!selector) return;
+      const el = document.querySelector(selector);
+      if (!el) return;
+      if (styleObj.fontFamily) el.style.fontFamily = `'${styleObj.fontFamily}', sans-serif`;
+      if (styleObj.fontSize) el.style.fontSize = styleObj.fontSize;
+      if (styleObj.color) el.style.color = styleObj.color;
+      if (styleObj.textAlign) el.style.textAlign = styleObj.textAlign;
+      if (styleObj.fontWeight) el.style.fontWeight = styleObj.fontWeight;
+      if (styleObj.fontStyle) el.style.fontStyle = styleObj.fontStyle;
+      if (styleObj.textDecoration) el.style.textDecoration = styleObj.textDecoration;
+    });
+  }
+
   const escapeHTML = (value) => String(value).replace(/[&<>'"]/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[character]));
   const setText = (selector, value) => {
     const element = document.querySelector(selector);
