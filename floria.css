@@ -1024,7 +1024,7 @@ main {
 
 .newsletter {
   display: flex;
-  border-bottom: 1px solid rgba(255, 255, 255, .2);
+  border-bottom: none !important;
 }
 
 .newsletter input {
@@ -2374,56 +2374,49 @@ main {
 }
 
 .review-wall {
-  max-width: 1100px;
+  max-width: 1140px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  grid-auto-rows: minmax(45px, auto);
-  gap: 16px;
-  align-items: start;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 20px;
+  align-items: stretch;
 }
 
 .review-card {
-  --review-bg: rgba(255, 255, 255, .72);
+  --review-bg: rgba(255, 255, 255, .75);
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  min-height: 235px;
-  padding: 27px 28px 25px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 0;
+  padding: 24px 26px 22px;
   border: 1px solid rgba(23, 51, 54, .13);
   border-radius: 20px;
   background: var(--review-bg);
-  box-shadow: 0 10px 30px rgba(23, 51, 54, .06);
+  box-shadow: 0 8px 24px rgba(23, 51, 54, .05);
   color: var(--floria-ink, #173336);
-  transition: transform .55s cubic-bezier(.2, .7, .2, 1), box-shadow .55s ease, border-color .45s ease;
+  transition: transform .35s ease, box-shadow .35s ease, border-color .35s ease;
 }
 
-.review-a {
-  grid-column: 1 / 5;
-  grid-row: 1 / 6;
-  transform: translateY(25px);
-}
-
-.review-b {
-  grid-column: 5 / 9;
-  grid-row: 2 / 8;
-  transform: translateY(-5px);
-}
-
+.review-a,
+.review-b,
 .review-c {
-  grid-column: 9 / 13;
-  grid-row: 1 / 7;
-  transform: translateY(42px);
+  grid-column: span 2;
+  transform: none;
 }
 
-.review-d {
-  grid-column: 4 / 8;
-  grid-row: 8 / 14;
-  transform: translateY(-18px);
+.review-d,
+.review-e {
+  grid-column: span 3;
+  transform: none;
 }
 
 .review-card:hover {
-  transform: translateY(-10px) !important;
+  transform: translateY(-5px) !important;
+  box-shadow: 0 14px 35px rgba(23, 51, 54, .1);
+  border-color: rgba(207, 169, 91, .4);
 }
 
 .review-card .quote-mark {
@@ -2442,47 +2435,47 @@ main {
 }
 
 .review-card>p {
-  max-width: 330px;
-  margin: 0 0 25px;
+  max-width: 100%;
+  margin: 0 0 16px;
   color: #405452;
   font-family: var(--floria-sans, Manrope, sans-serif);
-  font-size: 10px;
-  line-height: 1.85;
+  font-size: 13px;
+  line-height: 1.6;
 }
 
 .review-author {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   margin-top: auto;
 }
 
 .review-author .avatar {
   display: grid;
   place-items: center;
-  width: 30px;
-  height: 30px;
-  flex: 0 0 30px;
+  width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
   border: 1px solid rgba(207, 169, 91, .55);
   border-radius: 50%;
   background: rgba(207, 169, 91, .12);
   color: #8d6a2e;
-  font-size: 8px;
+  font-size: 12px;
   font-weight: 700;
 }
 
 .review-author strong {
   display: block;
   color: var(--floria-ink, #173336);
-  font-size: 9px;
+  font-size: 13px;
   line-height: 1.2;
 }
 
 .review-author small {
   display: block;
-  margin-top: 3px;
+  margin-top: 2px;
   color: var(--floria-muted, #697673);
-  font-size: 7px;
+  font-size: 11px;
   line-height: 1.2;
 }
 
@@ -2526,6 +2519,7 @@ main {
   .review-wall {
     grid-template-columns: repeat(2, 1fr);
     grid-auto-rows: auto;
+    gap: 16px;
   }
 
   .review-a,
@@ -2533,6 +2527,12 @@ main {
   .review-c,
   .review-d {
     grid-column: auto;
+    grid-row: auto;
+    transform: none;
+  }
+
+  .review-e {
+    grid-column: span 2;
     grid-row: auto;
     transform: none;
   }
@@ -2592,7 +2592,7 @@ main {
 
   .reviews-head {
     display: block !important;
-    margin-bottom: 38px;
+    margin-bottom: 30px;
   }
 
   .reviews-head h2 {
@@ -2614,20 +2614,22 @@ main {
   .review-a,
   .review-b,
   .review-c,
-  .review-d {
+  .review-d,
+  .review-e {
+    grid-column: auto !important;
     min-height: 0 !important;
-    padding: 24px 21px !important;
+    padding: 20px 18px !important;
     transform: none !important;
     border-radius: 18px;
   }
 
   .review-card:hover {
-    transform: translateY(-5px) !important;
+    transform: translateY(-4px) !important;
   }
 
   .review-card>p {
-    font-size: 10px;
-    line-height: 1.8;
+    font-size: 12px;
+    line-height: 1.6;
   }
 
   .reviews::before {
