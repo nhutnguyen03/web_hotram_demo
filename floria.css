@@ -276,6 +276,8 @@ main {
   max-height: 1000px;
   align-items: flex-end;
   background-position: center;
+  border-radius: 0 0 24px 24px;
+  overflow: hidden;
 }
 
 .hero::after {
@@ -612,6 +614,7 @@ main {
 /* ---------- AMENITIES ---------- */
 .amenities {
   background: var(--floria-paper);
+  padding-bottom: 30px !important;
 }
 
 .amenities .section-heading {
@@ -1002,7 +1005,7 @@ main {
 .footer-brand>p {
   max-width: 270px;
   color: rgba(232, 226, 215, .5);
-  font-size: 10px;
+  font-size: 11px;
   line-height: 1.8;
 }
 
@@ -1018,7 +1021,7 @@ main {
 .site-footer>div:not(.footer-brand):not(.footer-bottom)>a {
   display: block;
   color: rgba(232, 226, 215, .58);
-  font-size: 9px;
+  font-size: 11px;
   margin: 0 0 10px;
 }
 
@@ -2025,6 +2028,26 @@ main {
   background: var(--floria-paper, #f8f4eb);
   color: var(--floria-ink, #173336);
   position: relative;
+  isolation: isolate;
+  padding-bottom: 30px !important;
+  background: url('https://images.unsplash.com/photo-1618773928121-c32242e63f39?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat !important;
+}
+
+.packages::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.package-heading h2{
+  color: #ffffff !important;
+}
+
+.package-heading .section-lead {
+  color: rgba(255, 255, 255, 0.8) !important;
 }
 
 .package-heading {
@@ -2148,9 +2171,96 @@ main {
   transform: translateY(-10px);
 }
 
+.package-card.package-featured .package-tag {
+  border-color: rgba(207, 169, 91, .58) !important;
+  color: #fffaf0 !important;
+  background: rgba(255, 255, 255, 0.19) !important;
+  font-weight: 700 !important;
+}
+
 .package-card.package-featured:hover {
   transform: translateY(-18px);
   box-shadow: 0 28px 58px rgba(18, 53, 60, .25);
+}
+
+/* =========================================================
+   PREMIUM GOLD PACKAGE CARD (VÀNG KIM ĐẲNG CẤP)
+   ========================================================= */
+
+.package-card.package-featured-premium {
+  /* Khai báo hệ màu chuyên biệt cho thẻ Premium */
+  --package-bg: linear-gradient(135deg, #d4af37 0%, #b9955c 50%, #aa7c11 100%);
+  --package-border: #f3e5ab;
+  --package-text: #0d211d;      /* Màu chữ tối để tương phản cực rõ trên nền vàng */
+  --package-muted: #2c3e35;     /* Màu chữ phụ sẫm màu dễ đọc */
+  
+  background: var(--package-bg) !important;
+  border: 1px solid var(--package-border) !important;
+  color: var(--package-text) !important;
+  box-shadow: 0 18px 45px rgba(170, 124, 17, 0.35) !important;
+  transform: translateY(-10px);
+}
+
+/* Đổi màu tiêu đề chính */
+.package-card.package-featured-premium h3 {
+  color: #0d211d !important;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.3);
+}
+
+/* Đổi màu tag thông tin phía trên */
+.package-card.package-featured-premium .package-tag {
+  border-color: #0d211d !important;
+  color: #0d211d !important;
+  background: rgba(255, 255, 255, 0.35) !important;
+  font-weight: 700 !important;
+}
+
+/* Đổi màu mã số gói / Số thứ tự */
+.package-card.package-featured-premium .package-no {
+  color: #0d211d !important;
+  font-weight: 700 !important;
+}
+
+/* Đổi màu giá tiền & đơn vị */
+.package-card.package-featured-premium .package-price,
+.package-card.package-featured-premium .package-price small,
+.package-card.package-featured-premium .package-price span {
+  color: #0d211d !important;
+}
+
+/* Đổi màu và đường kẻ danh sách tính năng */
+.package-card.package-featured-premium li {
+  color: #182522 !important;
+  font-weight: 600 !important;
+  border-top-color: rgba(13, 33, 29, 0.2) !important;
+}
+
+.package-card.package-featured-premium li:last-child {
+  border-bottom-color: rgba(13, 33, 29, 0.2) !important;
+}
+
+.package-card.package-featured-premium li::before {
+  color: #0d211d !important; /* Icon hoa thị ✦ màu sẫm nổi bật */
+}
+
+/* Nút bấm Đặt gói (Button / Link) */
+.package-card.package-featured-premium .package-link {
+  border-color: #0d211d !important;
+  background: #0d211d !important;
+  color: #f2eee5 !important;
+}
+
+.package-card.package-featured-premium .package-link:hover {
+  background: #ffffff !important;
+  border-color: #ffffff !important;
+  color: #0d211d !important;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+}
+
+/* Hiệu ứng Hover tổng thể cho gói Premium */
+.package-card.package-featured-premium:hover {
+  transform: translateY(-18px) !important;
+  box-shadow: 0 28px 60px rgba(170, 124, 17, 0.5) !important;
 }
 
 .package-top {
@@ -2181,6 +2291,10 @@ main {
   letter-spacing: .8px;
   text-transform: uppercase;
   text-align: right;
+  border-color: rgba(207, 169, 91, .58) !important;
+  color: #173f45 !important;
+  background: rgba(255, 255, 255, 0.19) !important;
+  font-weight: 700 !important;
 }
 
 .package-card h3 {
@@ -2304,8 +2418,33 @@ main {
 .reviews {
   position: relative;
   overflow: hidden;
-  background: #eef1eb;
   color: var(--floria-ink, #173336);
+  padding-bottom: 30px !important;
+}
+
+.reviews::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('https://images.unsplash.com/photo-1618773928121-c32242e63f39?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat !important;
+  
+  /* Độ mờ ảnh nền (điều chỉnh px tùy ý) */
+  filter: blur(8px);
+  
+  /* Phóng to nhẹ để loại bỏ viền trắng bị lem ở 4 cạnh do hiệu ứng blur */
+  transform: scale(1.08); 
+  
+  /* Đẩy lớp nền xuống dưới cùng để không đè lên nội dung */
+  z-index: 0; 
+}
+
+/* Đảm bảo nội dung và biểu tượng dấu ngoặc kép nằm trên lớp nền mờ */
+.reviews > * {
+  position: relative;
+  z-index: 1;
 }
 
 .reviews::before {
@@ -2318,6 +2457,7 @@ main {
   font-size: 260px;
   line-height: 1;
   pointer-events: none;
+  z-index: 1;
 }
 
 .reviews-head {
