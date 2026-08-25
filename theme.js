@@ -184,6 +184,36 @@ function applySiteSettings(settings = getSiteSettings()) {
   if (/^https?:\/\//i.test(content.imageHero)) document.querySelector('.hero').style.backgroundImage = `url("${content.imageHero}")`;
   const buttonMap = { '.header-actions .outline-button': content.buttonHeroBooking, '.hero .gold-button': content.buttonHeroPrimary, '.hero .outline-button': content.buttonHeroBooking, '#about .text-button': content.buttonAbout, '#amenities .text-button': content.buttonAmenities, '.location .text-button': content.buttonLocation, '.offer .gold-button': content.buttonOffer, '#contact button[type="submit"]': content.buttonContact };
   Object.entries(buttonMap).forEach(([selector, label]) => { const button = document.querySelector(selector); if (button && label) { const icon = button.querySelector('span'); button.textContent = label; if (icon) button.append(' ', icon); } });
+  const setEditableText = (selector, key) => {
+    if (content[key] === undefined || content[key] === '') return;
+    document.querySelectorAll(selector).forEach((element) => { element.textContent = content[key]; });
+  };
+  setEditableText('#packages .eyebrow', 'packagesEyebrow');
+  setEditableText('#packages h2', 'packagesTitle');
+  setEditableText('#packages .section-lead', 'packagesLead');
+  setEditableText('#packages .package-note', 'packageNote');
+  setEditableText('#packages .package-price small', 'packagePriceFrom');
+  setEditableText('#packages .package-price span', 'packagePriceUnit');
+  document.querySelectorAll('#packages .package-card').forEach((card, packageIndex) => {
+    const packageNumber = packageIndex + 1;
+    setEditableText(`#packages .package-card:nth-child(${packageNumber}) .package-tag`, `package${packageNumber}Tag`);
+    setEditableText(`#packages .package-card:nth-child(${packageNumber}) h3`, `package${packageNumber}Title`);
+    setEditableText(`#packages .package-card:nth-child(${packageNumber}) .package-desc`, `package${packageNumber}Desc`);
+    card.querySelectorAll('li').forEach((item, itemIndex) => setEditableText(`#packages .package-card:nth-child(${packageNumber}) li:nth-child(${itemIndex + 1})`, `package${packageNumber}Item${itemIndex + 1}`));
+    const link = card.querySelector('.package-link');
+    const linkText = content[`package${packageNumber}Link`];
+    if (link && linkText) { const icon = link.querySelector('span'); link.textContent = linkText; if (icon) link.append(' ', icon); }
+  });
+  setEditableText('#reviews .eyebrow', 'reviewsEyebrow');
+  setEditableText('#reviews h2', 'reviewsTitle');
+  setEditableText('#reviews .review-score small', 'reviewsScoreLabel');
+  setEditableText('#reviews .reviews-note', 'reviewsNote');
+  document.querySelectorAll('#reviews .review-card').forEach((card, reviewIndex) => {
+    const reviewNumber = reviewIndex + 1;
+    setEditableText(`#reviews .review-card:nth-child(${reviewNumber}) > p`, `review${reviewNumber}Text`);
+    setEditableText(`#reviews .review-card:nth-child(${reviewNumber}) .review-author strong`, `review${reviewNumber}Name`);
+    setEditableText(`#reviews .review-card:nth-child(${reviewNumber}) .review-author small`, `review${reviewNumber}Role`);
+  });
   document.querySelectorAll('.main-nav a').forEach((link, index) => { const labels = { en: ['Home', 'About', 'Amenities', 'Location', 'Products', 'News', 'Contact'], de: ['Startseite', 'Projekt', 'Ausstattung', 'Lage', 'Produkte', 'News', 'Kontakt'], ko: ['홈', '소개', '편의시설', '위치', '상품', '소식', '문의'], zh: ['首页', '项目介绍', '设施', '位置', '产品', '新闻', '联系'] }; if (language !== 'vi') link.textContent = labels[language][index]; });
   const staticMap = staticTranslations[language] || {};
   Object.entries(staticMap).forEach(([selector, value]) => { document.querySelectorAll(selector).forEach((element) => { element.textContent = value; }); });

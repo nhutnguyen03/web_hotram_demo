@@ -4,7 +4,15 @@ const editableTranslationFields = [
   'heroKicker', 'heroTitle', 'heroSubtitle', 'heroScript', 'heroCopy',
   'aboutTitle', 'aboutCopy',
   'buttonHeroPrimary', 'buttonHeroBooking', 'buttonAbout',
-  'buttonAmenities', 'buttonLocation', 'buttonOffer', 'buttonContact'
+  'buttonAmenities', 'buttonLocation', 'buttonOffer', 'buttonContact',
+  'packagesEyebrow', 'packagesTitle', 'packagesLead', 'packageNote', 'packagePriceFrom', 'packagePriceUnit',
+  'package1Tag', 'package1Title', 'package1Desc', 'package1Item1', 'package1Item2', 'package1Item3', 'package1Item4', 'package1Link',
+  'package2Tag', 'package2Title', 'package2Desc', 'package2Item1', 'package2Item2', 'package2Item3', 'package2Item4', 'package2Link',
+  'package3Tag', 'package3Title', 'package3Desc', 'package3Item1', 'package3Item2', 'package3Item3', 'package3Item4', 'package3Link',
+  'reviewsEyebrow', 'reviewsTitle', 'reviewsScoreLabel',
+  'review1Text', 'review1Name', 'review1Role', 'review2Text', 'review2Name', 'review2Role',
+  'review3Text', 'review3Name', 'review3Role', 'review4Text', 'review4Name', 'review4Role',
+  'review5Text', 'review5Name', 'review5Role', 'reviewsNote'
 ];
 
 const defaults = {
@@ -16,6 +24,12 @@ const defaults = {
     aboutCopy: 'Hồ Tràm Santorini là tổ hợp nghỉ dưỡng – giải trí – đầu tư đẳng cấp, được quy hoạch bài bản với tầm nhìn trở thành điểm đến hàng đầu khu vực.',
     buttonHeroPrimary: 'Khám phá dự án', buttonHeroBooking: 'Booking tour', buttonAbout: 'Tìm hiểu thêm',
     buttonAmenities: 'Xem thêm tiện ích', buttonLocation: 'Xem bản đồ', buttonOffer: 'Đăng ký ngay', buttonContact: 'Gọi thông tin',
+    packagesEyebrow: 'Chọn nhịp nghỉ dưỡng của riêng bạn', packagesTitle: 'Gói nghỉ dưỡng', packagesLead: 'Những hành trình được thiết kế để bạn chỉ cần xách vali lên và tận hưởng Hồ Tràm theo một cách thật riêng.', packageNote: '* Mức giá trên là giá tham khảo từ, có thể thay đổi theo thời điểm, hạng phòng và số lượng khách. Vui lòng liên hệ để nhận báo giá chính xác.', packagePriceFrom: 'Từ', packagePriceUnit: 'đ/người',
+    package1Tag: '2 ngày 1 đêm', package1Title: 'Mây Biển An Nhiên', package1Desc: 'Một chuyến đi nhẹ nhàng cho hai người, đủ biển xanh, hoàng hôn và những phút nghỉ ngơi thật chậm.', package1Item1: '01 đêm lưu trú tiêu chuẩn', package1Item2: 'Bữa sáng cho 02 người', package1Item3: 'Đón hoàng hôn bên biển', package1Item4: 'Miễn phí sử dụng hồ bơi & khu nghỉ dưỡng', package1Link: 'Nhận tư vấn gói này',
+    package2Tag: '3 ngày 2 đêm · Được yêu thích', package2Title: 'Nắng Vàng Hồ Tràm', package2Desc: 'Hành trình trọn vẹn cho gia đình và nhóm bạn, kết hợp nghỉ dưỡng, ẩm thực và khám phá biển.', package2Item1: '02 đêm lưu trú', package2Item2: '02 bữa sáng & 01 bữa tối', package2Item3: 'Vé trải nghiệm tiện ích nổi bật', package2Item4: '01 hoạt động khám phá Hồ Tràm', package2Link: 'Nhận tư vấn gói này',
+    package3Tag: '3 ngày 2 đêm · Cao cấp', package3Title: 'Ngọc Triều Thảnh Thơi', package3Desc: 'Trải nghiệm riêng tư dành cho những ngày muốn tạm rời phố thị và tận hưởng dịch vụ theo phong cách thượng lưu.', package3Item1: '02 đêm hạng phòng cao cấp', package3Item2: 'Ăn sáng & set menu đặc biệt', package3Item3: 'Đưa đón theo lịch hẹn', package3Item4: 'Ưu tiên đặt dịch vụ & tiện ích', package3Link: 'Nhận tư vấn gói này',
+    reviewsEyebrow: 'Những điều ở lại sau chuyến đi', reviewsTitle: 'Lời khách ghé thăm', reviewsScoreLabel: 'Đánh giá trải nghiệm',
+    review1Text: 'Không gian rất dễ chịu, buổi chiều ngồi nhìn biển và ngắm hoàng hôn là khoảnh khắc mình thích nhất trong chuyến đi.', review1Name: 'Anh Minh', review1Role: 'Khách nghỉ dưỡng', review2Text: 'Thiết kế đẹp, nhiều góc chụp hình và các khu tiện ích được bố trí khá tinh tế. Rất hợp cho một kỳ nghỉ cuối tuần.', review2Name: 'Chị Lan', review2Role: 'Khách trải nghiệm', review3Text: 'Điều mình thích nhất là cảm giác tách khỏi nhịp sống thành phố nhưng vẫn có đủ dịch vụ để cả gia đình vui chơi và thư giãn.', review3Name: 'Khách gia đình', review3Role: 'Trải nghiệm Hồ Tràm', review4Text: 'Một nơi rất đáng để quay lại. Không gian ven biển, ánh sáng buổi tối và cách phục vụ tạo cảm giác nghỉ dưỡng khá trọn vẹn.', review4Name: 'Tuấn & Mai', review4Role: 'Khách nghỉ dưỡng', review5Text: 'Dịch vụ chu đáo, cảnh quan được chăm chút tỉ mỉ từ những chi tiết nhỏ nhất. Nhất định gia đình tôi sẽ quay lại.', review5Name: 'Chị Hoàng Yến', review5Role: 'Khách nghỉ dưỡng VIP', reviewsNote: 'Nội dung đánh giá đang là nội dung mẫu — có thể thay bằng đánh giá thực tế của khách hàng.',
     imageHero: '', imageAbout: '', imageHighlight1: '', imageHighlight2: '', imageHighlight3: '', imageHighlight4: '',
     imageAmenity1: '', imageAmenity2: '', imageAmenity3: '', imageAmenity4: '', imageNews1: '', imageNews2: '', imageNews3: ''
   },

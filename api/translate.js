@@ -2,7 +2,15 @@ const editableFields = [
   'heroKicker', 'heroTitle', 'heroSubtitle', 'heroScript', 'heroCopy',
   'aboutTitle', 'aboutCopy',
   'buttonHeroPrimary', 'buttonHeroBooking', 'buttonAbout',
-  'buttonAmenities', 'buttonLocation', 'buttonOffer', 'buttonContact'
+  'buttonAmenities', 'buttonLocation', 'buttonOffer', 'buttonContact',
+  'packagesEyebrow', 'packagesTitle', 'packagesLead', 'packageNote', 'packagePriceFrom', 'packagePriceUnit',
+  'package1Tag', 'package1Title', 'package1Desc', 'package1Item1', 'package1Item2', 'package1Item3', 'package1Item4', 'package1Link',
+  'package2Tag', 'package2Title', 'package2Desc', 'package2Item1', 'package2Item2', 'package2Item3', 'package2Item4', 'package2Link',
+  'package3Tag', 'package3Title', 'package3Desc', 'package3Item1', 'package3Item2', 'package3Item3', 'package3Item4', 'package3Link',
+  'reviewsEyebrow', 'reviewsTitle', 'reviewsScoreLabel',
+  'review1Text', 'review1Name', 'review1Role', 'review2Text', 'review2Name', 'review2Role',
+  'review3Text', 'review3Name', 'review3Role', 'review4Text', 'review4Name', 'review4Role',
+  'review5Text', 'review5Name', 'review5Role', 'reviewsNote'
 ];
 
 const languageCodes = { en: 'EN', de: 'DE', ko: 'KO', zh: 'ZH' };
