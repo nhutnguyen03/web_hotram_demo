@@ -38,6 +38,15 @@ if (menuButton && navigation) {
   });
 }
 
+document.querySelectorAll('a[href="#top"]').forEach((topLink) => {
+  topLink.addEventListener('click', (event) => {
+    event.preventDefault();
+    navigation?.classList.remove('open');
+    menuButton?.setAttribute('aria-expanded', 'false');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+});
+
 const revealObserver = new IntersectionObserver((entries) => {
   entries.forEach((entry) => {
     if (entry.isIntersecting) {

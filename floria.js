@@ -33,10 +33,18 @@
         const x = (event.clientX - rect.left) / rect.width - .5;
         const y = (event.clientY - rect.top) / rect.height - .5;
         const image = card.querySelector('img');
+        if (card.classList.contains('highlight-card')) {
+          card.style.setProperty('--mouse-x', `${event.clientX - rect.left}px`);
+          card.style.setProperty('--mouse-y', `${event.clientY - rect.top}px`);
+        }
         if (image) image.style.transform = `scale(1.035) translate(${x * 5}px, ${y * 5}px)`;
       });
       card.addEventListener('mouseleave', () => {
         const image = card.querySelector('img');
+        if (card.classList.contains('highlight-card')) {
+          card.style.removeProperty('--mouse-x');
+          card.style.removeProperty('--mouse-y');
+        }
         if (image) image.style.transform = '';
       });
     });
