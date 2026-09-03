@@ -2747,12 +2747,12 @@ main {
 .success-modal-check span {
   border-bottom: 2px solid #edc56e;
   border-right: 2px solid #edc56e;
-  height: 19px;
-  left: 17px;
+  height: 11px;
+  left: 50%;
   position: absolute;
-  top: 12px;
-  transform: rotate(45deg);
-  width: 10px;
+  top: 50%;
+  transform: translate(-50%, -62%) rotate(45deg);
+  width: 20px;
 }
 
 .success-modal-kicker {
