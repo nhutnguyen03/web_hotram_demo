@@ -2745,14 +2745,21 @@ main {
 }
 
 .success-modal-check span {
-  border-bottom: 2px solid #edc56e;
-  border-right: 2px solid #edc56e;
-  height: 11px;
+  display: none;
+}
+
+.success-modal-check svg {
+  fill: none;
+  height: 28px;
   left: 50%;
   position: absolute;
+  stroke: #edc56e;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
   top: 50%;
-  transform: translate(-50%, -62%) rotate(45deg);
-  width: 20px;
+  transform: translate(-50%, -50%);
+  width: 28px;
 }
 
 .success-modal-kicker {
