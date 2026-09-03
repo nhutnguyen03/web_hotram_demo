@@ -105,6 +105,29 @@ if (siteHeader) {
 
 const contactForm = document.querySelector('#contact-form');
 const formStatus = document.querySelector('.form-status');
+const successModal = document.querySelector('#success-modal');
+const successModalCloseButtons = successModal?.querySelectorAll('[data-success-modal-close]');
+let lastFocusedElement;
+
+const closeSuccessModal = () => {
+  if (!successModal) return;
+  successModal.hidden = true;
+  document.body.classList.remove('modal-open');
+  lastFocusedElement?.focus();
+};
+
+const openSuccessModal = () => {
+  if (!successModal) return;
+  lastFocusedElement = document.activeElement;
+  successModal.hidden = false;
+  document.body.classList.add('modal-open');
+  successModal.querySelector('.success-modal-close')?.focus();
+};
+
+successModalCloseButtons?.forEach((button) => button.addEventListener('click', closeSuccessModal));
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape' && successModal && !successModal.hidden) closeSuccessModal();
+});
 
 contactForm.addEventListener('submit', async (event) => {
   event.preventDefault();
@@ -126,6 +149,7 @@ contactForm.addEventListener('submit', async (event) => {
     formStatus.textContent = 'Cảm ơn bạn. Hồ Tràm Santorini sẽ liên hệ sớm nhất.';
     formStatus.style.color = '#dfc48d';
     contactForm.reset();
+    openSuccessModal();
   } catch (error) {
     formStatus.textContent = error.message || 'Có lỗi khi gửi thông tin. Vui lòng thử lại hoặc gọi 0909 123 456.';
     formStatus.style.color = '#e2a5a0';
