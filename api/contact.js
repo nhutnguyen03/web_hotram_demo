@@ -25,10 +25,16 @@ export default async function handler(request, response) {
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
         body: JSON.stringify({ token: googleScriptToken, contact })
       });
-      const result = await googleResponse.json().catch(() => ({}));
+      const responseText = await googleResponse.text();
+      let result = {};
+      try {
+        result = JSON.parse(responseText);
+      } catch {
+        result = { message: responseText.slice(0, 240) };
+      }
       return response.status(googleResponse.ok && result.success ? 200 : 502).json({
         success: Boolean(result.success),
-        message: result.message || 'Google Sheets không nhận được thông tin.',
+        message: result.message || `Google Apps Script trả về HTTP ${googleResponse.status}. Kiểm tra URL /exec và quyền triển khai.`,
         providerStatus: googleResponse.status
       });
     }
