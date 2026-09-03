@@ -59,12 +59,45 @@ const revealObserver = new IntersectionObserver((entries) => {
 document.querySelectorAll('.reveal, .reveal-up, .reveal-left, .reveal-right, .reveal-scale').forEach((element) => revealObserver.observe(element));
 
 if (siteHeader) {
+  const hero = document.querySelector('.hero');
+  const progressBar = document.createElement('div');
+  progressBar.className = 'scroll-progress';
+  progressBar.setAttribute('aria-hidden', 'true');
+  document.body.append(progressBar);
+
+  const sections = [...document.querySelectorAll('main section[id]')];
+  const navLinks = [...document.querySelectorAll('.main-nav a[href^="#"]')];
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let scrollFrame = 0;
+
   const handleScroll = () => {
     if (window.scrollY > 40) {
       siteHeader.classList.add('scrolled');
     } else {
       siteHeader.classList.remove('scrolled');
     }
+
+    if (scrollFrame) return;
+    scrollFrame = window.requestAnimationFrame(() => {
+      const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const scrollRatio = scrollableHeight > 0 ? window.scrollY / scrollableHeight : 0;
+      progressBar.style.transform = `scaleX(${Math.min(1, Math.max(0, scrollRatio))})`;
+
+      if (hero && !reducedMotion.matches) {
+        hero.style.setProperty('--hero-shift', `${Math.min(window.scrollY * 0.12, 90)}px`);
+      }
+
+      const activeSection = window.scrollY < window.innerHeight * 0.55
+        ? null
+        : sections.reduce((current, section) => {
+          return section.getBoundingClientRect().top <= window.innerHeight * 0.35 ? section : current;
+        }, sections[0]);
+      navLinks.forEach((link) => {
+        const isHome = link.getAttribute('href') === '#top';
+        link.classList.toggle('active', activeSection ? link.getAttribute('href') === `#${activeSection.id}` : isHome);
+      });
+      scrollFrame = 0;
+    });
   };
   window.addEventListener('scroll', handleScroll, { passive: true });
   handleScroll();

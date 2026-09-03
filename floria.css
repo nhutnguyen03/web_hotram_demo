@@ -275,9 +275,22 @@ main {
   height: 860px;
   max-height: 1000px;
   align-items: flex-end;
-  background-position: center;
+  background-position: center var(--hero-shift, 0px);
   border-radius: 0 0 24px 24px;
   overflow: hidden;
+}
+
+.scroll-progress {
+  background: var(--floria-gold);
+  height: 2px;
+  left: 0;
+  position: fixed;
+  right: 0;
+  top: 0;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform .12s linear;
+  z-index: 200;
 }
 
 .hero::after {
@@ -1301,6 +1314,16 @@ main {
   .footer-bottom {
     flex-direction: column;
     gap: 10px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-progress {
+    display: none;
+  }
+
+  .hero {
+    background-position: center;
   }
 }
 
